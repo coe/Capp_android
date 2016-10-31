@@ -52,9 +52,16 @@ public class MainActivity extends AppCompatActivity implements MainActivityHandl
     public native String stringFromJNI();
     public native void onClickFromJNI();
     public native void init();
+    public native void addListener(Listener listener);
+
 
     @Override
     public void onSampleButtonClick(View view) {
         onClickFromJNI();
     }
+
+    public interface Listener {
+        public void eventOccurred();
+    }
+
 }

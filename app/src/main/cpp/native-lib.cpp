@@ -3,6 +3,19 @@
 #include "AndroidMainNative.h"
 #define SAFE_DELETE(p) { if (p){ delete p; } p = NULL; }
 
+JavaVM * savedVM = NULL;
+jobject saved_listener_instance;
+
+JNIEXPORT void JNICALL
+Java_jp_coe_capp_MainActivity_addListener(JNIEnv *env, jobject instance, jobject listener) {
+
+    env->GetJavaVM( &savedVM );
+    //save listener_instance for use later
+    saved_listener_instance = listener;
+
+
+}
+
 extern "C" {
 // フィールド情報
 struct fields_t {
@@ -30,6 +43,35 @@ static AndroidMainNative* getInstance(JNIEnv* env, jobject thiz)
 static void setInstance(JNIEnv* env, jobject thiz, AndroidMainNative* na)
 {
     env->SetLongField(thiz, fields.context, (jlong)na);
+}
+
+void doSomething()
+{
+    //Get current thread JNIEnv
+    JNIEnv * ENV;
+    int stat = savedVM->GetEnv((void **)&ENV, JNI_VERSION_1_6);
+    if (stat == JNI_EDETACHED)  //We are on a different thread, attach
+        savedVM->AttachCurrentThread((JNIEnv **) &ENV, NULL);
+    if( ENV == NULL )
+        return;  //Cant attach to java, bail
+
+    //Get the Listener class reference
+    jclass listenerClassRef = ENV->GetObjectClass( saved_listener_instance );
+
+    //Use Listener class reference to load the eventOccurred method
+    jmethodID listenerEventOccured = ENV->GetMethodID( listenerClassRef, "eventOccurred", "()V" );
+
+    //Get Info class reference
+    jclass infoClsRef = ENV->FindClass( "Info" );
+
+//    //Create Info class
+//    jobject info_instance = ENV->NewObject( infoClsRef, ..... );//For you to fill in with your arguments
+
+    //invoke listener eventOccurred
+    ENV->CallVoidMethod( saved_listener_instance, listenerEventOccured );
+
+//    //Cleanup
+//    ENV->DeleteLocalRef( info_instance );
 }
 
 /**
