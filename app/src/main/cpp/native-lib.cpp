@@ -16,6 +16,8 @@ Java_jp_coe_capp_MainActivity_addListener(JNIEnv *env, jobject instance, jobject
 
 }
 
+
+
 extern "C" {
 // フィールド情報
 struct fields_t {
@@ -74,11 +76,59 @@ void doSomething()
 //    ENV->DeleteLocalRef( info_instance );
 }
 
-/**
- * 初期化
- */
-void JNICALL Java_jp_coe_capp_MainActivity_init(JNIEnv *env, jobject thiz)
-{
+
+//JNIEXPORT void JNICALL
+//Java_jp_coe_capp_MainActivity_setObserver(JNIEnv *env, jobject instance, jobject javaobserver) {
+//
+//    //Retrieve the CPP version of MyLibrary. For me, I stored it inside the java
+//    //object as a field, but you can implement it any way you want.
+//    AndroidMainNative* cppMyLibrary = getInstance(env, instance);
+//
+//    if (cppMyLibrary == NULL) {
+//        //Handle the problem
+//        return;
+//    }
+//    jthrowable exc = NULL;
+//
+//    //Keep the jvm object around; the env is not available in another thread
+//    //but can be obtained from the jvm.
+//    JavaVM* jvm;
+//    env->GetJavaVM(&jvm);
+//
+//    //The observer has to be made global; it's not available in another thread.
+//    jobject observer = env->NewGlobalRef(observer);
+//    //TODO: retrieve the previous observer and clean it up with DeleteGlobalRef()
+//    //TODO: clean up this observer when destroying MyLibrary with DeleteGlobalRef()
+//
+//    try {
+//        //At this point, both "jvm" and "observer" are accessible from the other thread.
+//        cppMyLibrary->setLogFunction([jvm, observer] (std::string& p0, std::string& p1) {
+//            JNIEnv* env;
+//            jvm->AttachCurrentThread(&env, NULL); //Obtain the env
+//            jclass clazz = env->GetObjectClass(observer);
+//            jmethodID meth = env->GetMethodID(clazz, "log",
+//                                              "(Ljava/lang/String;Ljava/lang/String;)V");
+//            jstring s0 = env->NewStringUTF(p0.c_str());
+//            jstring s1 = env->NewStringUTF(p1.c_str());
+//            env->CallVoidMethod(observer, meth, s0, s1);
+//
+//            //TODO: make sure this is called even if there's an exception!
+//            jvm->DetachCurrentThread();
+//        });
+//    } catch (...) {
+//        exc = //handle your exceptions here
+//    }
+//
+//    if (exc != NULL) {
+//        env->Throw(exc);
+//    }
+//
+//}
+
+
+JNIEXPORT void JNICALL
+Java_jp_coe_capp_MainActivity_init(JNIEnv *env, jobject instance, jobject observer) {
+
     jclass clazz;
 
     // クラス検索
@@ -93,7 +143,8 @@ void JNICALL Java_jp_coe_capp_MainActivity_init(JNIEnv *env, jobject thiz)
 
     // クラス生成
     AndroidMainNative *na = new AndroidMainNative();
-    setInstance(env, thiz, na);
+    setInstance(env, instance, na);
+
 }
 
 /**

@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
+import java.util.Observer;
+
 import jp.coe.capp.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity implements MainActivityHandlers,MainActivityInterface {
@@ -34,6 +36,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityHandl
     }
 
     @Override
+    public void connect(MainActivityInterface connectCallback) {
+
+    }
+
+    @Override
     public void dismiss(){
         Log.d(TAG,"dismiss");
 
@@ -45,15 +52,20 @@ public class MainActivity extends AppCompatActivity implements MainActivityHandl
 
     }
 
+    @Override
+    public void connectCallback() {
+
+    }
+
     /**
      * A native method that is implemented by the 'native-lib' native library,
      * which is packaged with this application.
      */
     public native String stringFromJNI();
     public native void onClickFromJNI();
-    public native void init();
-    public native void addListener(Listener listener);
 
+    //http://stackoverflow.com/questions/20270120/how-to-implement-the-observer-pattern-in-jni
+    public native void init(Observer observer);
 
     @Override
     public void onSampleButtonClick(View view) {

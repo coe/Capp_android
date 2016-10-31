@@ -6,7 +6,8 @@ package jp.coe.capp;
 
 public interface MainActivityInterface {
     void showDiarog();
-//    void connect(std::function< void() > callback);
+    void connect(MainActivityInterface connectCallback);
     void dismiss();
     void playSound();
+    void connectCallback();
 }
