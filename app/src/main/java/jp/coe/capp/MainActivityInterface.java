@@ -6,8 +6,7 @@ package jp.coe.capp;
 
 public interface MainActivityInterface {
     void showDiarog();
-    void connect(MainActivityInterface connectCallback);
+    void connect();
     void dismiss();
     void playSound();
-    void connectCallback();
 }

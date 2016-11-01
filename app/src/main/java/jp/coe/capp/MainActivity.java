@@ -36,8 +36,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityHandl
     }
 
     @Override
-    public void connect(MainActivityInterface connectCallback) {
-
+    public void connect() {
+        //TODO:connectした
+        Log.d(TAG,"connect");
+        connectCallback();
     }
 
     @Override
@@ -52,10 +54,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityHandl
 
     }
 
-    @Override
-    public void connectCallback() {
-
-    }
 
     /**
      * A native method that is implemented by the 'native-lib' native library,
@@ -65,7 +63,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityHandl
     public native void onClickFromJNI();
 
     //http://stackoverflow.com/questions/20270120/how-to-implement-the-observer-pattern-in-jni
-    public native void init(Observer observer);
+    public native void init();
+    public native void connectCallback();
+
 
     @Override
     public void onSampleButtonClick(View view) {

@@ -5,6 +5,11 @@
 #include "AndroidMainNative.h"
 #include <iostream>
 
+
+AndroidMainNative::AndroidMainNative() {
+
+}
+
 void AndroidMainNative::showDiarog(){
     jclass clazz = env_->FindClass("jp/coe/capp/MainActivity");
     jmethodID messageMe = env_->GetMethodID(clazz, "showDiarog","()V");
@@ -13,6 +18,7 @@ void AndroidMainNative::showDiarog(){
 }
 
 void AndroidMainNative::connect(std::function<void()> callback) {
+    callback_ = callback;
     //TODO:コールバックどうする
     jclass clazz = env_->FindClass("jp/coe/capp/MainActivity");
     jmethodID messageMe = env_->GetMethodID(clazz, "connect","()V");
@@ -37,17 +43,24 @@ void AndroidMainNative::playSound() {
     env_->CallVoidMethod(thiz_,messageMe);
 }
 
-void AndroidMainNative::setEnv(JNIEnv *env) {
-    env_ = env;
+
+void AndroidMainNative::connectCallback() {
+    callback_();
 }
 
 void AndroidMainNative::setThiz(jobject thiz) {
     thiz_ = thiz;
 }
 
-AndroidMainNative::AndroidMainNative() {
-
+void AndroidMainNative::setEnv(JNIEnv *env) {
+    env_ = env;
 }
+
+
+
+
+
+
 
 
 

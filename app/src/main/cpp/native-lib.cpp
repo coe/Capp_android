@@ -125,9 +125,18 @@ void doSomething()
 //
 //}
 
+JNIEXPORT void JNICALL
+Java_jp_coe_capp_MainActivity_connectCallback__(JNIEnv *env, jobject instance) {
+
+    AndroidMainNative* ptr = getInstance(env, instance);
+    ptr->connectCallback();
+
+
+}
+
 
 JNIEXPORT void JNICALL
-Java_jp_coe_capp_MainActivity_init(JNIEnv *env, jobject instance, jobject observer) {
+Java_jp_coe_capp_MainActivity_init(JNIEnv *env, jobject instance) {
 
     jclass clazz;
 
